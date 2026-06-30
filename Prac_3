@@ -1,0 +1,26 @@
+package prac_3
+
+object MangroveCoverAnalysis {
+
+  def main(args: Array[String]): Unit = {
+
+    val mangroveCover = List(48.0, 55.0, 43.0, 61.0, 50.0, 58.0)
+
+    println("Mangrove Cover (in hectares):")
+    println(mangroveCover)
+
+    // Mean
+    val mean = mangroveCover.sum / mangroveCover.size
+
+    // Variance
+    val variance = mangroveCover.map(x => math.pow(x - mean, 2)).sum / mangroveCover.size
+
+    // Standard Deviation
+    val standardDeviation = math.sqrt(variance)
+
+    println(f"\nMean Mangrove Cover = $mean%.2f hectares")
+    println(f"Variance = $variance%.2f")
+    println(f"Standard Deviation = $standardDeviation%.2f hectares")
+  }
+
+}
