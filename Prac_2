@@ -1,0 +1,33 @@
+package Prac_2
+
+object MeanMedianMode {
+
+  def main(args: Array[String]): Unit = {
+
+    val nums = List(13, 15, 18, 20, 15, 35, 15)
+
+    println(s"Numbers: $nums")
+
+    // Mean
+    val mean = nums.sum.toDouble / nums.size
+    println(f"Mean = $mean%.2f")
+
+    // Median
+    val sortedNums = nums.sorted
+
+    val median =
+      if (sortedNums.size % 2 == 0)
+        (sortedNums(sortedNums.size / 2 - 1) + sortedNums(sortedNums.size / 2)).toDouble / 2
+      else
+        sortedNums(sortedNums.size / 2)
+
+    println(s"Median = $median")
+
+    // Mode
+    val frequency = nums.groupBy(x => x).mapValues(_.size)
+    val maxFreq = frequency.values.max
+    val mode = frequency.filter(_._2 == maxFreq).keys
+
+    println(s"Mode = ${mode.mkString(", ")}")
+  }
+}
