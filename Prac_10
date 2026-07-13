@@ -1,0 +1,36 @@
+package Prac_10
+// Filter rows where "Intraocular Pressure (IOP)" > 20
+import com.github.tototoshi.csv._
+import java.io.File
+
+object Ananya_Prca_10_FilterRowThreshold {
+  def main(args: Array[String]): Unit = {
+    val reader = CSVReader.open(new File("glaucoma_dataset.csv"))
+    val data = reader.allWithHeaders()
+    reader.close()
+
+    println("Sample IOP Values:")
+
+    data.take(10).foreach { row =>
+      println(row("Intraocular Pressure (IOP)"))
+    }
+
+    val threshold = 20.0
+
+    // Filter rows where "Intraocular Pressure (IOP)" > threshold
+    val filteredRows = data.filter { row =>
+      row.get("Intraocular Pressure (IOP)").exists(value => value.toDoubleOption.exists(_ >
+        threshold))
+    }
+    println(s"\nTotal Rows with IOP > $threshold: ${filteredRows.length}\n")
+
+    // Print each filtered row
+    filteredRows.take(10).foreach { row =>
+      println(
+        "IOP: " + row("Intraocular Pressure (IOP)") +
+          ", Glaucoma Status: " + row("Diagnosis")
+      )
+    }
+  }
+
+}
