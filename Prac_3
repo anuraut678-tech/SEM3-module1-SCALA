@@ -4,7 +4,7 @@ object MangroveCoverAnalysis {
 
   def main(args: Array[String]): Unit = {
 
-    val mangroveCover = List(48.0, 55.0, 43.0, 61.0, 50.0, 58.0)
+    val mangroveCover = List(48.0, 55.0, 43.0, 61.0, 50.0, 58.0, 65.0, 47.0, 53.0, 60.0)
 
     println("Mangrove Cover (in hectares):")
     println(mangroveCover)
