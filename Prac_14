@@ -1,0 +1,41 @@
+package Prac_14
+
+import breeze.linalg._
+import breeze.plot._
+import com.github.tototoshi.csv._
+import java.io.File
+
+object Ananya_Prac_14_Histogram {
+
+  def main(args: Array[String]): Unit = {
+
+    // Read the CSV file
+    val reader = CSVReader.open(new File("Seed_Data.csv"))
+    val data = reader.allWithHeaders()
+    reader.close()
+
+    // Extract Kernel Length values
+    val kernelLengths =
+      DenseVector(data.map(_("LK").toDouble).toArray)
+
+    // Create the figure
+    val fig = Figure("Histogram of Kernel Length")
+
+    // Different bin sizes
+    val binSizes = List(5, 10, 20)
+
+    // Create the histograms
+    for ((bins, idx) <- binSizes.zipWithIndex) {
+
+      val plt = fig.subplot(1, binSizes.length, idx)
+
+      plt += hist(kernelLengths, bins)
+
+      plt.title = s"Histogram with $bins bins"
+      plt.xlabel = "Kernel Length (LK)"
+      plt.ylabel = "Frequency"
+    }
+    // Display the graph
+    fig.refresh()
+  }
+}
