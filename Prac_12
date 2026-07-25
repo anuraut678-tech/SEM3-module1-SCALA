@@ -1,0 +1,53 @@
+import com.github.tototoshi.csv._
+import java.io.File
+
+object Ananya_Prac_12_OneHotEncoding {
+
+  def main(args: Array[String]): Unit = {
+
+    // Read the CSV file
+    val reader = CSVReader.open(new File("Seed_Data.csv"))
+    val data = reader.allWithHeaders()
+    reader.close()
+
+    // Get the unique target values
+    val categories = data.map(_("target")).distinct.sorted
+
+    // Perform One-Hot Encoding
+    val newData = data.map { row =>
+      val category = row("target")
+
+      val oneHot = categories.map { cat =>
+        cat -> (if (cat == category) "1" else "0")
+      }.toMap
+
+      (row - "target") ++ oneHot
+    }
+
+    // Get the headers
+    val headers = newData.head.keys.toList
+
+    // Print the headers
+    println(headers.mkString(", "))
+
+    // Print only the first 10 encoded rows
+    println("\nDisplaying the First 10 Encoded Rows:\n")
+
+    newData.take(10).foreach { row =>
+      println(headers.map(row).mkString(", "))
+    }
+
+    // Write all the encoded data to a new CSV file
+    val writer = CSVWriter.open(new File("seeds_encoded.csv"))
+
+    writer.writeRow(headers)
+
+    newData.foreach { row =>
+      writer.writeRow(headers.map(row))
+    }
+
+    writer.close()
+
+    println("\nOne-Hot Encoded file written to seeds_encoded.csv")
+  }
+}
