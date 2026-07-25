@@ -1,0 +1,45 @@
+import breeze.linalg._
+import breeze.plot._
+import com.github.tototoshi.csv._
+import java.io.File
+
+object Ananya_Prac_13_ScatterPlot {
+
+  def main(args: Array[String]): Unit = {
+
+    // Read the CSV file
+    val reader = CSVReader.open(new File("Seed_Data.csv"))
+    val data = reader.allWithHeaders()
+    reader.close()
+
+    // Separate the data according to target values
+    val class0 = data.filter(_("target") == "0")
+    val class1 = data.filter(_("target") == "1")
+    val class2 = data.filter(_("target") == "2")
+
+    // Extract Kernel Length and Kernel Width
+    def extractXY(rows: List[Map[String, String]]) = {
+      val x = DenseVector(rows.map(_("LK").toDouble).toArray)
+      val y = DenseVector(rows.map(_("WK").toDouble).toArray)
+      (x, y)
+    }
+
+    val (x0, y0) = extractXY(class0)
+    val (x1, y1) = extractXY(class1)
+    val (x2, y2) = extractXY(class2)
+
+    // Create the Scatter Plot
+    val fig = Figure()
+    val plt = fig.subplot(0)
+
+    plt.title = "Kernel Length vs Kernel Width"
+    plt.xlabel = "Kernel Length (LK)"
+    plt.ylabel = "Kernel Width (WK)"
+
+    plt += plot(x0, y0, '.', name = "Kama", colorcode = "blue")
+    plt += plot(x1, y1, '.', name = "Rosa", colorcode = "green")
+    plt += plot(x2, y2, '.', name = "Canadian", colorcode = "red")
+
+    fig.refresh()
+  }
+}
