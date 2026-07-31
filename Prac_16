@@ -1,0 +1,52 @@
+package Prac_16
+
+import breeze.linalg._
+import breeze.plot._
+import com.github.tototoshi.csv._
+import java.io.File
+
+object Ananya_Prac_16_CombinedPlot {
+  def main(args: Array[String]): Unit = {
+
+    val reader = CSVReader.open(new File("Seed_Data.csv"))
+    val data = reader.allWithHeaders()
+    reader.close()
+
+    // Extract values from the A column
+    val areaValues = data.flatMap { row =>
+      try {
+        Some(row("A").toDouble)
+      } catch {
+        case _: Throwable => None
+      }
+    }
+
+    // X-axis : Sample Number
+    val x = DenseVector((1 to areaValues.length).map(_.toDouble).toArray)
+
+    // Y-axis : Area values
+    val y = DenseVector(areaValues.toArray)
+
+    // Create Figure
+    val fig = Figure("Seed Dataset - Line + Scatter Plot")
+    val plt = fig.subplot(0)
+
+    // Line Plot
+    plt += plot(x, y,
+      name = "Area Line",
+      colorcode = "blue"
+    )
+
+    // Scatter Plot
+    plt += plot(x, y, '.',
+      name = "Area Points",
+      colorcode = "red"
+    )
+
+    plt.xlabel = "Sample Number"
+    plt.ylabel = "Area (A)"
+    plt.title = "Seed Dataset : Line and Scatter Plot"
+
+    fig.refresh()
+  }
+}
