@@ -1,0 +1,42 @@
+package Prac_15
+
+import breeze.linalg._
+import breeze.plot._
+import com.github.tototoshi.csv._
+import java.io.File
+
+object Ananya_Prac_15_StockLinePlot {
+  def main(args: Array[String]): Unit = {
+
+    val reader = CSVReader.open(new File("Seed_Data.csv"))
+    val data = reader.allWithHeaders()
+    reader.close()
+
+    // Extract the Area column
+    val areaValues = data.flatMap { row =>
+      try {
+        Some(row("A").toDouble)
+      } catch {
+        case _: Throwable => None
+      }
+    }
+
+    // X-axis : Sample Number
+    val x = DenseVector((1 to areaValues.length).map(_.toDouble).toArray)
+
+    // Y-axis : Area values
+    val y = DenseVector(areaValues.toArray)
+
+    // Create the graph
+    val fig = Figure("Seed Dataset - Area Trend")
+    val plt = fig.subplot(0)
+
+    plt += plot(x, y, name = "Area", colorcode = "blue")
+
+    plt.xlabel = "Sample Number"
+    plt.ylabel = "Area"
+    plt.title = "Area Values in Seed Dataset"
+
+    fig.refresh()
+  }
+}
